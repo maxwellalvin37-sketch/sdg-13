@@ -29,7 +29,7 @@ body {
 }
 
 /* --- Typography --- */
-h1, h2, h3 {
+h1, h2, h3, .section-title {
   font-family: 'Poppins', sans-serif;
   color: var(--primary-green);
 }
@@ -137,9 +137,7 @@ select {
   margin-bottom: 12px;
 }
 
-select:focus {
-  border-color: var(--accent-green);
-}
+select:focus { border-color: var(--accent-green); }
 
 /* --- Buttons --- */
 button {
@@ -154,13 +152,19 @@ button {
   transition: all 0.2s ease;
 }
 
-.btn-add {
-  background-color: var(--primary-green);
-  color: #ffffff;
-}
-
+.btn-add { background-color: var(--primary-green); color: #ffffff; }
 .btn-add:hover { background-color: #1b4332; }
 .btn-add:active { transform: scale(0.98); }
+
+.btn-secondary {
+  width: auto;
+  padding: 6px 12px;
+  font-size: 0.8rem;
+  background-color: #f1f5f9;
+  color: #475569;
+  border: 1px solid var(--border-color);
+}
+.btn-secondary:hover { background-color: #e2e8f0; }
 
 .btn-reset {
   background-color: transparent;
@@ -196,7 +200,7 @@ button {
 .total-unit { font-size: 0.95rem; font-weight: 500; color: var(--text-muted); }
 .goal-text { font-size: 0.85rem; color: var(--text-muted); margin-top: 5px; }
 
-/* --- Congratulations Alert Styles --- */
+/* --- Congratulations Alert --- */
 #congrats-msg {
   background-color: #e9f5ed;
   color: var(--primary-green);
@@ -231,26 +235,53 @@ button {
 /* --- Impact Equivalence Box Style --- */
 .equivalence-box {
   margin-top: 15px;
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   color: #334155;
   background-color: #f1f5f9;
-  padding: 10px;
+  padding: 12px;
   border-radius: 6px;
-  border-left: 4px solid #94a3b8;
+  border-left: 4px solid var(--primary-green);
   text-align: left;
 }
+.eq-item { margin-bottom: 4px; }
+.eq-item:last-child { margin-bottom: 0; }
+.stat-highlight { font-weight: 600; color: var(--primary-green); }
 
-/* --- History Logger Section Styles --- */
+/* --- Interactive Quiz Styles --- */
+.quiz-section {
+  margin-top: 25px;
+  border: 1px solid var(--border-color);
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 12px;
+}
+.section-title { display: block; font-size: 0.9rem; font-weight: 700; margin-bottom: 8px; }
+#quiz-question { font-size: 0.85rem; margin-bottom: 12px; color: #475569; }
+.quiz-options { display: flex; flex-direction: column; gap: 8px; }
+.quiz-btn {
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 0.82rem;
+  padding: 8px 12px;
+  text-align: left;
+  background-color: #f8fafc;
+  border: 1px solid var(--border-color);
+  color: var(--text-dark);
+}
+.quiz-btn:hover { background-color: #edf2f7; }
+#quiz-feedback { margin-top: 10px; font-size: 0.82rem; font-weight: 600; padding: 6px; border-radius: 4px; }
+.correct-feed { background-color: #d8f3dc; color: #1b4332; }
+.wrong-feed { background-color: #fde2e4; color: #ff0a54; }
+.quiz-feedback-hidden { display: none; }
+
+/* --- History Logger Section --- */
 .history-section {
   margin-top: 25px;
   border-top: 1px solid var(--border-color);
   padding-top: 20px;
 }
-
-.history-section h3 {
-  font-size: 1rem;
-  margin-bottom: 10px;
-}
+.history-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.history-section h3 { font-size: 1rem; }
 
 #history-list {
   list-style: none;
@@ -269,12 +300,11 @@ button {
   justify-content: space-between;
   color: #475569;
 }
-
 #history-list li:last-child { border-bottom: none; }
 .empty-log-msg { color: var(--text-muted) !important; font-style: italic; text-align: center; display: block !important; padding: 15px !important; }
 .timestamp { font-size: 0.75rem; color: var(--text-muted); }
 
-/* --- Rotating Climate Tips Footer Section --- */
+/* --- Rotating Climate Tips Footer --- */
 .tip-section {
   margin-top: 25px;
   background-color: #e0f2fe;
@@ -282,18 +312,5 @@ button {
   padding: 15px;
   border: 1px solid #bae6fd;
 }
-
-.tip-title {
-  display: block;
-  font-family: 'Poppins', sans-serif;
-  font-weight: 700;
-  font-size: 0.85rem;
-  color: #0369a1;
-  margin-bottom: 4px;
-}
-
-#climate-tip {
-  font-size: 0.85rem;
-  color: #0c4a6e;
-  line-height: 1.4;
-}
+.tip-title { display: block; font-weight: 700; font-size: 0.85rem; color: #0369a1; margin-bottom: 4px; }
+#climate-tip { font-size: 0.85rem; color: #0c4a6e; line-height: 1.4; }
