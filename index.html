@@ -21,11 +21,10 @@
     <div class="header">
       <span class="sdg-badge">SDG 13: Climate Action</span>
       <h1>Carbon Offset Tracker</h1>
-      <!-- Feature 1: Eco Rank Badge Display -->
       <div id="eco-badge" class="badge-novice">Rank: Eco-Novice 🌱</div>
     </div>
 
-    <!-- Feature 2: Custom Goal Configurator -->
+    <!-- Custom Goal Configurator -->
     <div class="config-section">
       <label for="goal-input">Set Your Monthly Goal (kg):</label>
       <div class="goal-input-group">
@@ -49,7 +48,6 @@
 
     <!-- Progress Display Section -->
     <div class="progress-section">
-      <!-- Feature 3: Action Streak Count Display -->
       <div class="streak-banner">🔥 Action Count: <span id="streak-count">0</span> logged</div>
 
       <div class="stats-display">
@@ -66,14 +64,25 @@
       <div class="progress-container">
         <div class="progress-bar" id="progress-bar"></div>
       </div>
+
+      <!-- New Feature: Real-World Equivalence Display Box -->
+      <div class="equivalence-box">
+        💡 <strong>Your Real-World Impact:</strong> Equivalent to avoiding the $CO_2$ emissions of charging <span id="phone-count" style="font-weight: 600; color: var(--primary-green);">0</span> smartphones!
+      </div>
     </div>
 
-    <!-- Feature 4: Interactive Activity History Log -->
+    <!-- Interactive Activity History Log -->
     <div class="history-section">
       <h3>Activity History Log</h3>
       <ul id="history-list">
         <li class="empty-log-msg">No actions logged yet. Start saving carbon!</li>
       </ul>
+    </div>
+
+    <!-- New Feature: Rotating Daily Climate Tip Container -->
+    <div class="tip-section">
+      <span class="tip-title">💡 Did You Know?</span>
+      <p id="climate-tip">Small actions added up by thousands of people make a massive worldwide difference.</p>
     </div>
 
     <!-- Reset Feature -->
