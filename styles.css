@@ -1,19 +1,23 @@
-/* --- Design System & Color Palette Theme System --- */
+/* ==========================================================================
+   Variables & General Layout Reset
+   ========================================================================== */
 :root {
-  --bg-color: #ecf3f0;          
-  --card-bg: #ffffff;          
-  --primary-green: #1b4332;    
-  --accent-green: #40916c;     
-  --text-dark: #2d3142;        
-  --text-muted: #5c677d;       
-  --border-color: #dee2e6;     
-  --danger-red: #ba181b;       
+  --bg-app: #f4f7f6;
+  --bg-card: #ffffff;
+  --text-main: #1e293b;
+  --text-muted: #64748b;
   
-  --custom-blue: #023e8a;
-  --quest-orange: #d97706;
+  --color-primary: #10b981; /* Green */
+  --color-secondary: #3b82f6; /* Blue */
+  --color-accent: #f97316; /* Orange */
+  --color-danger: #ef4444; /* Red */
+  --border-light: #e2e8f0;
+  
+  --font-heading: 'Poppins', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --radius: 12px;
 }
 
-/* --- Base Layout & Structural Component Resets --- */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -21,175 +25,358 @@
 }
 
 body {
-  font-family: 'Inter', sans-serif;
-  background-color: var(--bg-color);
-  color: var(--text-dark);
-  padding: 40px 20px;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  min-height: 100vh;
+  background-color: var(--bg-app);
+  color: var(--text-main);
+  font-family: var(--font-body);
+  line-height: 1.5;
+  padding: 20px;
 }
 
+/* App Main Structural Shell */
 .app-container {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 25px;
-  width: 100%;
-  max-width: 1100px;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-/* Responsiveness adjustments for mobile screens */
-@media (max-width: 850px) {
+@media (min-width: 768px) {
   .app-container {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1.2fr 1fr;
   }
 }
 
-/* --- Modular Card Structural Definitions --- */
+/* Card Paradigms */
 .tracker-card {
-  background-color: var(--card-bg);
-  padding: 24px;
-  border-radius: 14px;
-  box-shadow: 0 4px 18px rgba(27, 67, 50, 0.05);
-  border: 1px solid rgba(222, 226, 230, 0.7);
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius);
+  padding: 20px;
   margin-bottom: 20px;
-}
-.tracker-card:last-child { margin-bottom: 0; }
-.header-card { background: linear-gradient(135deg, #1b4332 0%, #2d6a4f 100%); color: #fff; text-align: center; }
-.header-card h1 { color: #fff; font-size: 1.8rem; font-weight: 800; margin-bottom: 6px; }
-.header-card .subtitle { color: #d8f3dc; font-size: 0.9rem; margin-bottom: 12px; }
-
-h3 {
-  font-family: 'Poppins', sans-serif;
-  font-size: 1.05rem;
-  font-weight: 700;
-  color: var(--primary-green);
-  margin-bottom: 14px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
 }
 
+.header-card {
+  background: linear-gradient(135deg, #064e3b 0%, #047857 100%);
+  color: white;
+  border: none;
+}
+
+.header-card h1 {
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  margin-top: 8px;
+}
+
+.header-card .subtitle {
+  color: #a7f3d0;
+  font-size: 0.95rem;
+  margin-bottom: 12px;
+}
+
+/* Badges & Rankings */
 .sdg-badge {
-  display: inline-block;
-  font-size: 0.7rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 1.2px;
-  background-color: #ffd166;
-  color: #7f5539;
-  padding: 5px 14px;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 4px 10px;
   border-radius: 20px;
-  margin-bottom: 10px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  display: inline-block;
 }
 
-/* --- Dynamic Badge Rank Classes --- */
-[id="eco-badge"] { display: inline-block; font-size: 0.8rem; font-weight: 700; padding: 6px 14px; border-radius: 6px; }
-.badge-novice { background-color: #e2e8f0; color: #475569; }
-.badge-helper { background-color: #d8f3dc; color: #1b4332; }
-.badge-hero { background-color: #fef08a; color: #854d0e; border: 1px solid #facc15; }
-
-/* --- Forms, Custom Configurator Input Units --- */
-.goal-input-group { display: flex; gap: 10px; margin-top: 6px; }
-input[type="number"], input[type="text"] {
-  flex: 1; padding: 10px 12px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.9rem; outline: none; transition: border 0.2s;
+[class^="badge-"] {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.85rem;
 }
-input:focus { border-color: var(--accent-green); }
-label { display: block; font-size: 0.8rem; font-weight: 600; color: var(--text-muted); margin-bottom: 4px; }
+.badge-novice { background: #f1f5f9; color: #475569; }
+.badge-warrior { background: #dcfce7; color: #15803d; }
+.badge-champion { background: #fef9c3; color: #a16207; }
 
-select {
-  width: 100%; padding: 12px; font-size: 0.9rem; border: 1px solid var(--border-color); border-radius: 8px; background-color: #fff; outline: none; margin-bottom: 14px;
+/* ==========================================================================
+   Inputs, Tabs, Form Elements
+   ========================================================================== */
+label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 500;
+  margin-bottom: 6px;
+  color: var(--text-muted);
 }
 
-/* --- Navigation Layout Form Tabs Control system --- */
-.tabs-container { display: flex; gap: 8px; margin-bottom: 14px; border-bottom: 1px solid var(--border-color); padding-bottom: 8px; }
+input, select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  background: #f8fafc;
+  margin-bottom: 12px;
+}
+
+input:focus, select:focus {
+  outline: 2px solid var(--color-primary);
+  background: white;
+}
+
+.goal-input-group {
+  display: flex;
+  gap: 10px;
+}
+.goal-input-group input { margin-bottom: 0; width: 70%; }
+.goal-input-group button { width: 30%; white-space: nowrap; }
+
+/* Custom Tab Switchers */
+.tabs-container {
+  display: flex;
+  border-bottom: 2px solid var(--border-light);
+  margin-bottom: 15px;
+}
+
 .tab-btn {
-  background: none; border: none; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); padding: 6px 12px; cursor: pointer; width: auto; border-radius: 4px;
+  background: none;
+  border: none;
+  padding: 8px 16px;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s;
 }
-.tab-btn.active { background-color: #e9f5ed; color: var(--primary-green); }
+
+.tab-btn.active {
+  color: var(--color-primary);
+  border-bottom: 2px solid var(--color-primary);
+  margin-bottom: -2px;
+}
+
 .tab-view { display: none; }
 .tab-view.active { display: block; }
 
-/* --- Control Input Interfaces (Buttons) --- */
+/* Core Button Engine */
 button {
-  font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 0.9rem; width: 100%; padding: 11px; border: none; border-radius: 8px; cursor: pointer; transition: all 0.2s ease;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.1s active, opacity 0.2s;
 }
-.btn-add { background-color: var(--primary-green); color: #fff; }
-.btn-add:hover { background-color: #0f261d; }
-#update-goal-btn { width: auto; padding: 0 16px; background-color: var(--text-dark); color: #fff; }
+button:active { transform: scale(0.98); }
 
-.btn-secondary { width: auto; padding: 5px 12px; font-size: 0.75rem; background-color: #f1f5f9; color: #475569; border: 1px solid var(--border-color); }
-.btn-secondary:hover { background-color: #e2e8f0; }
+.btn-add {
+  background-color: var(--color-primary);
+  color: white;
+  width: 100%;
+}
+.btn-secondary {
+  background-color: #f1f5f9;
+  color: var(--text-main);
+  font-size: 0.8rem;
+  padding: 6px 12px;
+}
+.btn-reset {
+  background: none;
+  color: var(--color-danger);
+  border: 1px dashed var(--color-danger);
+  width: 100%;
+  margin-top: 10px;
+}
+.btn-reset:hover { background: #fef2f2; }
 
-.btn-reset { background-color: transparent; color: var(--text-muted); font-size: 0.8rem; margin-top: 10px; width: 100%; text-align: center; }
-.btn-reset:hover { color: var(--danger-red); text-decoration: underline; }
+/* ==========================================================================
+   Analytics Dashboard & Progress Trackers
+   ========================================================================== */
+.streak-banner {
+  background: #fef3c7;
+  color: #d97706;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 15px;
+  display: inline-block;
+}
 
-/* --- Progress Tracking Indicators View Elements --- */
-.progress-card-style { background-color: #fafbfc; border-left: 5px solid var(--accent-green); text-align: center; }
-.streak-banner { font-size: 0.75rem; font-weight: 700; background-color: #fef3c7; color: #92400e; padding: 4px 12px; border-radius: 4px; display: inline-block; margin-bottom: 12px; }
-.total-number { font-size: 2.8rem; font-weight: 800; color: var(--primary-green); line-height: 1; }
-.total-unit { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 4px; }
-.goal-text { font-size: 0.8rem; color: var(--text-muted); }
+.stats-display {
+  margin-bottom: 15px;
+}
+.total-number {
+  font-size: 3.5rem;
+  font-weight: 800;
+  font-family: var(--font-heading);
+  color: var(--color-primary);
+  line-height: 1;
+}
+.total-unit {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 5px;
+}
+.goal-text { font-size: 0.9rem; font-weight: 500; }
 
-.progress-container { background-color: #e9ecef; border-radius: 10px; height: 16px; width: 100%; overflow: hidden; margin: 15px 0; }
-.progress-bar { background-color: var(--accent-green); height: 100%; width: 0%; transition: width 0.4s ease; }
+/* Live Progress Meter Animation Framework */
+.progress-container {
+  background: #e2e8f0;
+  border-radius: 10px;
+  height: 12px;
+  width: 100%;
+  overflow: hidden;
+  margin: 15px 0;
+}
+.progress-bar {
+  background: linear-gradient(90deg, #10b981, #059669);
+  height: 100%;
+  width: 0%;
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
 
-/* --- Impact Equivalency Grid Blocks --- */
-.equivalence-box { display: flex; flex-direction: column; gap: 6px; padding: 12px; background-color: #f1f5f9; border-radius: 8px; text-align: left; font-size: 0.8rem; }
-.stat-highlight { font-weight: 700; color: var(--primary-green); }
+/* Equivalencies Container Boxes */
+.equivalence-box {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 15px;
+}
+.eq-item {
+  background: #f8fafc;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  border: 1px solid var(--border-light);
+}
+.stat-highlight {
+  display: block;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
 
-/* --- Feature 1: Pure CSS Layout Graph Components --- */
-.chart-container { display: flex; flex-direction: column; gap: 10px; }
-.chart-bar-wrapper { display: grid; grid-template-columns: 70px 1fr 45px; align-items: center; gap: 10px; font-size: 0.8rem; }
-.chart-label { font-weight: 600; color: #475569; }
-.chart-bar-track { background-color: #f1f5f9; height: 12px; border-radius: 6px; overflow: hidden; width: 100%; }
+/* Milestone Alert Configurations */
+.congrats-hidden {
+  display: none;
+}
+.congrats-visible {
+  display: block;
+  background: #dcfce7;
+  color: #166534;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  margin: 10px 0;
+  border-left: 4px solid var(--color-primary);
+  animation: popIn 0.3s ease;
+}
+
+/* ==========================================================================
+   CSS Micro Data Distribution Graphs
+   ========================================================================== */
+.chart-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 10px;
+}
+.chart-bar-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.chart-label { width: 60px; font-size: 0.8rem; color: var(--text-muted); font-weight: 500; }
+.chart-bar-track { flex-grow: 1; background: #e2e8f0; height: 10px; border-radius: 5px; overflow: hidden; }
 .chart-fill-color { height: 100%; width: 0%; transition: width 0.4s ease; }
-.bg-green { background-color: var(--accent-green); }
-.bg-blue { background-color: #3a86c8; }
-.bg-orange { background-color: #f59e0b; }
-.chart-percentage-text { text-align: right; font-weight: 700; color: #475569; }
+.bg-green { background-color: var(--color-primary); }
+.bg-blue { background-color: var(--color-secondary); }
+.bg-orange { background-color: var(--color-accent); }
+.chart-percentage-text { width: 45px; text-align: right; font-size: 0.8rem; font-weight: 600; }
 
-/* --- Feature 2: Trophy Achievement Locker Elements --- */
-.trophy-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; text-align: center; }
-.trophy-item { padding: 12px 6px; border: 1px solid var(--border-color); border-radius: 10px; background-color: #f8fafc; transition: all 0.3s; }
-.trophy-icon { display: block; font-size: 1.4rem; margin-bottom: 4px; filter: grayscale(100%); opacity: 0.4; }
-.trophy-title { display: block; font-size: 0.75rem; font-weight: 700; color: #334155; }
-.trophy-desc { display: block; font-size: 0.65rem; color: var(--text-muted); line-height: 1.2; margin-top: 2px; }
-/* Active unlock status override configurations */
-.trophy-item.unlocked { background-color: #f0fdf4; border-color: #bbf7d0; box-shadow: 0 4px 10px rgba(74, 222, 128, 0.15); }
-.trophy-item.unlocked .trophy-icon { filter: grayscale(0%); opacity: 1; animation: pop 0.4s ease; }
+/* ==========================================================================
+   Achievements & Interactive Challenges Layout
+   ========================================================================== */
+.trophy-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-top: 10px;
+}
+.trophy-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 10px 5px;
+  background: #f8fafc;
+  border-radius: 8px;
+  border: 1px solid var(--border-light);
+  transition: all 0.3s ease;
+}
+.trophy-item.locked { opacity: 0.4; filter: grayscale(100%); }
+.trophy-icon { font-size: 1.5rem; margin-bottom: 4px; }
+.trophy-title { font-size: 0.75rem; font-weight: 700; line-height: 1.2; }
+.trophy-desc { font-size: 0.65rem; color: var(--text-muted); margin-top: 2px; line-height: 1.1; }
 
-@keyframes pop { 0% { transform: scale(0.8); } 50% { transform: scale(1.2); } 100% { transform: scale(1); } }
+/* Challenges & Quests Item Cards */
+.quest-item-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  background: #fafafa;
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  margin-top: 8px;
+}
+.quest-details h4 { font-size: 0.85rem; font-weight: 600; }
+.quest-details p { font-size: 0.75rem; color: var(--text-muted); }
+.btn-quest-claim {
+  background: var(--color-accent);
+  color: white;
+  font-size: 0.75rem;
+  padding: 4px 8px;
+}
+.btn-quest-claim.claimed {
+  background: #cbd5e1;
+  color: #64748b;
+  cursor: not-allowed;
+}
 
-/* --- Feature 3: Classroom Leaderboard Displays --- */
-.leaderboard-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
-.leader-item { display: flex; align-items: center; padding: 8px 12px; background-color: #f8fafc; border-radius: 6px; font-size: 0.8rem; border: 1px solid #f1f5f9; }
-.rank-num { font-weight: 700; width: 24px; color: var(--text-muted); }
-.leader-name { flex: 1; color: #334155; font-weight: 500; }
-.leader-score { font-weight: 700; color: var(--primary-green); }
-.user-row { background-color: #fef08a !important; border-color: #fef08a; }
-.user-row .leader-name, .user-row .leader-score { color: #854d0e; }
+/* ==========================================================================
+   Lists, Tables & Footer System
+   ========================================================================== */
+.leaderboard-list { list-style: none; margin-top: 10px; }
+.leader-item {
+  display: flex;
+  align-items: center;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border-light);
+  font-size: 0.85rem;
+}
+.leader-item:last-child { border-bottom: none; }
+.rank-num { width: 25px; font-weight: 700; color: var(--text-muted); }
+.leader-name { flex-grow: 1; }
+.leader-score { font-weight: 600; }
+.user-row { background-color: #ecfdf5; border-radius: 6px; font-weight: 600; }
 
-/* --- Feature 4: Interactive Challenge Quest Rows --- */
-.quest-row { display: flex; justify-content: space-between; align-items: center; padding: 10px; background-color: #fffbeb; border: 1px solid #fef3c7; border-radius: 8px; margin-bottom: 8px; font-size: 0.8rem; }
-.quest-info strong { display: block; color: #92400e; }
-.quest-info span { color: #b45309; font-size: 0.75rem; }
-.btn-quest { width: auto; padding: 6px 12px; font-size: 0.75rem; background-color: var(--quest-orange); color: #fff; border-radius: 6px; }
-.btn-quest:hover { background-color: #b45309; }
-.quest-done { background-color: #f0fdf4; border-color: #bbf7d0; color: #166534; font-weight: 600; padding: 6px; border-radius: 4px; font-size: 0.75rem; }
-
-/* --- History Logger Lists Display Panels --- */
 .history-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-#history-list { list-style: none; max-height: 140px; overflow-y: auto; border: 1px solid var(--border-color); border-radius: 8px; }
-#history-list li { padding: 8px 12px; font-size: 0.8rem; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; background-color: #fdfdfd; }
-#history-list li:last-child { border-bottom: none; }
-.empty-log-msg { color: var(--text-muted) !important; font-style: italic; text-align: center; display: block !important; padding: 15px !important; width: 100%; }
-.timestamp { font-size: 0.7rem; color: var(--text-muted); }
+#history-list { list-style: none; max-height: 160px; overflow-y: auto; font-size: 0.85rem; }
+#history-list li { padding: 6px 0; border-bottom: 1px solid var(--border-light); display: flex; justify-content: space-between; }
+.empty-log-msg { color: var(--text-muted); font-style: italic; text-align: center; border: none !important; padding: 15px 0 !important; }
 
-/* --- Congratulations Alert Box --- */
-#congrats-msg { background-color: #d8f3dc; color: #1b4332; border: 1px solid #95d5b2; padding: 10px; border-radius: 8px; font-size: 0.8rem; margin-bottom: 12px; }
-.congrats-hidden { display: none; }
-.congrats-visible { display: block !important; }
+.tip-section { background: #eff6ff; border-radius: var(--radius); padding: 15px; margin-top: 20px; border-left: 4px solid var(--color-secondary); }
+.tip-title { font-weight: 700; font-size: 0.85rem; color: var(--color-secondary); display: block; }
+#climate-tip { font-size: 0.8rem; color: #1e3a8a; margin-top: 4px; }
 
-/* --- Rotating Informational Climate Tips Footer --- */
-.tip-section { background-color: #e0f2fe; border: 1px solid #bae6fd; border-radius: 10px; padding: 14px; margin-bottom: 15px; }
-.tip-title { display: block; font-weight: 700; font-size: 0.8rem; color: #0369a1; margin-bottom: 2px; }
-#climate-tip { font-size: 0.8rem; color: #0c4a6e; line-height: 1.4; }
+@keyframes popIn {
+  0% { transform: scale(0.95); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
