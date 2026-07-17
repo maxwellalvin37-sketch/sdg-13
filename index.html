@@ -8,97 +8,189 @@
   <!-- Google Fonts: Poppins (Headings) and Inter (Body text) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght=400;500;600&family=Poppins:wght=600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght=400;500;600;700&family=Poppins:wght=600;700;800&display=swap" rel="stylesheet">
   
   <!-- Link to external CSS file -->
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-  <div class="tracker-card">
+  <div class="app-container">
     
-    <!-- Header -->
-    <div class="header">
-      <span class="sdg-badge">SDG 13: Climate Action</span>
-      <h1>Carbon Offset Tracker</h1>
-      <div id="eco-badge" class="badge-novice">Rank: Eco-Novice 🌱</div>
-    </div>
+    <!-- LEFT PANEL: Main Tracking & Input Controls -->
+    <div class="main-panel">
+      <!-- Header Card -->
+      <div class="tracker-card header-card">
+        <span class="sdg-badge">SDG 13: Climate Action</span>
+        <h1>Carbon Offset Tracker</h1>
+        <p class="subtitle">Log daily lifestyle metrics to combat regional greenhouse emissions</p>
+        <div id="eco-badge" class="badge-novice">Rank: Eco-Novice 🌱</div>
+      </div>
 
-    <!-- Custom Goal Configurator -->
-    <div class="config-section">
-      <label for="goal-input">Set Your Monthly Goal (kg):</label>
-      <div class="goal-input-group">
-        <input type="number" id="goal-input" value="50" min="5" max="500">
-        <button id="update-goal-btn">Set Goal</button>
+      <!-- Configurator & Goals Box -->
+      <div class="tracker-card sub-card">
+        <h3>Configuration Settings</h3>
+        <label for="goal-input">Adjust Monthly Goal Target (kg):</label>
+        <div class="goal-input-group">
+          <input type="number" id="goal-input" value="50" min="5" max="500">
+          <button id="update-goal-btn">Set Target</button>
+        </div>
+      </div>
+
+      <!-- Logging Input Panel Container -->
+      <div class="tracker-card sub-card">
+        <h3>Log Carbon Reductions</h3>
+        
+        <div class="tabs-container">
+          <button class="tab-btn active" onclick="switchLogTab('preset')">Presets</button>
+          <button class="tab-btn" onclick="switchLogTab('custom')">Custom Action</button>
+        </div>
+
+        <!-- Tab 1: Preset Actions Form Dropdown -->
+        <div id="preset-tab-view" class="tab-view active">
+          <label for="action-select">Choose a completed activity:</label>
+          <select id="action-select">
+            <option value="1.5" data-text="Biked/Walked instead of driving">Biked/Walked to school instead of driving (+1.5 kg)</option>
+            <option value="0.8" data-text="Ate a plant-based meal">Ate a fully plant-based meal (+0.8 kg)</option>
+            <option value="0.6" data-text="Hung clothes to dry">Hung clothes to dry instead of using the dryer (+0.6 kg)</option>
+            <option value="0.2" data-text="Used reusable water bottle/bag">Used a reusable water bottle/bag all day (+0.2 kg)</option>
+          </select>
+          <button class="btn-add" id="add-btn">Add Preset Action</button>
+        </div>
+
+        <!-- Tab 2: Custom Action Form Inputs -->
+        <div id="custom-tab-view" class="tab-view">
+          <label for="custom-name">Action Title:</label>
+          <input type="text" id="custom-name" placeholder="e.g., Unplugged power strips">
+          <label for="custom-value" style="margin-top: 8px;">Estimated CO₂ Saved (kg):</label>
+          <input type="number" id="custom-value" placeholder="e.g., 0.4" step="0.1" min="0.1">
+          <button class="btn-add" id="add-custom-btn" style="margin-top: 12px;">Log Custom Action</button>
+        </div>
+      </div>
+
+      <!-- Live Interactive Challenge Quests Section -->
+      <div class="tracker-card sub-card text-card-style">
+        <h3>🎯 Weekly Impact Challenges</h3>
+        <p class="info-note">Complete special items below to claim bonus carbon metric rewards!</p>
+        <div id="challenges-list-container"></div>
       </div>
     </div>
 
-    <!-- User Input Section -->
-    <div class="input-section">
-      <label for="action-select">Choose a lifestyle action you completed:</label>
-      <select id="action-select">
-        <option value="1.5" data-text="Biked/Walked instead of driving">Biked/Walked to school instead of driving (+1.5 kg)</option>
-        <option value="0.8" data-text="Ate a plant-based meal">Ate a fully plant-based meal (+0.8 kg)</option>
-        <option value="0.6" data-text="Hung clothes to dry">Hung clothes to dry instead of using the dryer (+0.6 kg)</option>
-        <option value="0.2" data-text="Used reusable water bottle/bag">Used a reusable water bottle/bag all day (+0.2 kg)</option>
-      </select>
+    <!-- RIGHT PANEL: Dashboard Analytics, Achievements & Logs -->
+    <div class="side-panel">
       
-      <button class="btn-add" id="add-btn">Add Action</button>
-    </div>
+      <!-- Live Meter Metrics Box -->
+      <div class="tracker-card progress-card-style">
+        <div class="streak-banner">🔥 Action Count: <span id="streak-count">0</span> logged</div>
 
-    <!-- Progress Display Section -->
-    <div class="progress-section">
-      <div class="streak-banner">🔥 Action Count: <span id="streak-count">0</span> logged</div>
+        <div class="stats-display">
+          <div class="total-number" id="total-saved">0.0</div>
+          <div class="total-unit">kilograms of CO<sub>2</sub> saved</div>
+          <div class="goal-text">Target Goal Progress: <span id="goal-target">50</span> kg</div>
+        </div>
 
-      <div class="stats-display">
-        <div class="total-number" id="total-saved">0.0</div>
-        <div class="total-unit">kilograms of CO<sub>2</sub> saved</div>
-        <div class="goal-text">Target Goal: <span id="goal-target">50</span> kg</div>
+        <!-- Milestone Alert Message Box -->
+        <div id="congrats-msg" class="congrats-hidden">
+          🎉 <strong>Congratulations!</strong> You've passed the 30 kg milestone! Keep it up! 🌍
+        </div>
+
+        <div class="progress-container">
+          <div class="progress-bar" id="progress-bar"></div>
+        </div>
+
+        <!-- Equivalencies Output Container -->
+        <div class="equivalence-box">
+          <div class="eq-item">📱 Charged: <span id="phone-count" class="stat-highlight">0</span> phones</div>
+          <div class="eq-item">🌳 Tree Absorption Value: <span id="tree-count" class="stat-highlight">0.00</span> days</div>
+        </div>
       </div>
 
-      <!-- Congratulations Milestone Alert -->
-      <div id="congrats-msg" class="congrats-hidden">
-        🎉 <strong>Congratulations!</strong> You've passed the 30 kg milestone! Keep it up! 🌍
+      <!-- Pure CSS Data Dashboard Micro Graph Analytics -->
+      <div class="tracker-card sub-card">
+        <h3>📊 Source Distribution Analytics</h3>
+        <div class="chart-container">
+          <div class="chart-bar-wrapper">
+            <span class="chart-label">Presets</span>
+            <div class="chart-bar-track"><div id="chart-fill-preset" class="chart-fill-color bg-green" style="width: 0%"></div></div>
+            <span id="chart-val-preset" class="chart-percentage-text">0kg</span>
+          </div>
+          <div class="chart-bar-wrapper">
+            <span class="chart-label">Customs</span>
+            <div class="chart-bar-track"><div id="chart-fill-custom" class="chart-fill-color bg-blue" style="width: 0%"></div></div>
+            <span id="chart-val-custom" class="chart-percentage-text">0kg</span>
+          </div>
+          <div class="chart-bar-wrapper">
+            <span class="chart-label">Quests</span>
+            <div class="chart-bar-track"><div id="chart-fill-quests" class="chart-fill-color bg-orange" style="width: 0%"></div></div>
+            <span id="chart-val-quests" class="chart-percentage-text">0kg</span>
+          </div>
+        </div>
       </div>
 
-      <div class="progress-container">
-        <div class="progress-bar" id="progress-bar"></div>
+      <!-- Trophy Achievements Locker Board -->
+      <div class="tracker-card sub-card">
+        <h3>🏆 Milestone Achievements</h3>
+        <div class="trophy-grid">
+          <div id="trophy-first" class="trophy-item locked">
+            <span class="trophy-icon">🌱</span>
+            <span class="trophy-title">First Step</span>
+            <span class="trophy-desc">Log 1st activity</span>
+          </div>
+          <div id="trophy-half" class="trophy-item locked">
+            <span class="trophy-icon">⛰️</span>
+            <span class="trophy-title">Halfway Mark</span>
+            <span class="trophy-desc">Pass 25 kg threshold</span>
+          </div>
+          <div id="trophy-goal" class="trophy-item locked">
+            <span class="trophy-icon">👑</span>
+            <span class="trophy-title">Goal Achieved</span>
+            <span class="trophy-desc">Hit chosen targets</span>
+          </div>
+        </div>
       </div>
 
-      <!-- Real-World Equivalence Display Box -->
-      <div class="equivalence-box">
-        <div class="eq-item">📱 Charged: <span id="phone-count" class="stat-highlight">0</span> phones</div>
-        <div class="eq-item">🌳 Yearly Tree Absorption Value: <span id="tree-count" class="stat-highlight">0.00</span> days</div>
+      <!-- Gamified Leaderboard Board Simulation Module -->
+      <div class="tracker-card sub-card">
+        <h3>👥 Eco-Classroom Leaderboard</h3>
+        <ul class="leaderboard-list">
+          <li class="leader-item">
+            <span class="rank-num">1</span>
+            <span class="leader-name">Sarah Jenkins</span>
+            <span class="leader-score">64.5 kg</span>
+          </li>
+          <li class="leader-item user-row">
+            <span class="rank-num" id="user-rank-num">3</span>
+            <span class="leader-name">You (Current Student)</span>
+            <span class="leader-score" id="user-leaderboard-score">0.0 kg</span>
+          </li>
+          <li class="leader-item">
+            <span class="rank-num">3</span>
+            <span class="leader-name">Michael Chang</span>
+            <span class="leader-score">12.2 kg</span>
+          </li>
+        </ul>
       </div>
-    </div>
 
-    <!-- Interactive Eco-Quiz Card Section -->
-    <div class="quiz-section">
-      <span class="section-title">🧠 Mini Climate Quiz Challenge</span>
-      <p id="quiz-question">Loading question...</p>
-      <div class="quiz-options" id="quiz-options-container"></div>
-      <p id="quiz-feedback" class="quiz-feedback-hidden"></p>
-    </div>
-
-    <!-- Interactive Activity History Log -->
-    <div class="history-section">
-      <div class="history-header">
-        <h3>Activity History Log</h3>
-        <button id="download-report-btn" class="btn-secondary">📋 Export Summary</button>
+      <!-- Activity History Log Card -->
+      <div class="tracker-card sub-card">
+        <div class="history-header">
+          <h3>Activity History Log</h3>
+          <button id="download-report-btn" class="btn-secondary">📋 Export Summary</button>
+        </div>
+        <ul id="history-list">
+          <li class="empty-log-msg">No actions logged yet. Start saving carbon!</li>
+        </ul>
       </div>
-      <ul id="history-list">
-        <li class="empty-log-msg">No actions logged yet. Start saving carbon!</li>
-      </ul>
-    </div>
 
-    <!-- Rotating Daily Climate Tip Footer -->
-    <div class="tip-section">
-      <span class="tip-title">💡 Did You Know?</span>
-      <p id="climate-tip">Small actions added up by thousands of people make a massive worldwide difference.</p>
-    </div>
+      <!-- Rotating Educational Message Footer Box -->
+      <div class="tip-section">
+        <span class="tip-title">💡 Did You Know?</span>
+        <p id="climate-tip">Small actions added up by thousands of people make a massive worldwide difference.</p>
+      </div>
 
-    <!-- Reset Feature -->
-    <button class="btn-reset" id="reset-btn">Reset Tracker Data</button>
+      <!-- Structural Storage Operations Reset Button -->
+      <button class="btn-reset" id="reset-btn">Reset Tracker Data</button>
+    </div>
 
   </div>
 
