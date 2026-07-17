@@ -21,6 +21,10 @@ const customNameInput = document.getElementById('custom-name');
 const customValueInput = document.getElementById('custom-value');
 const addCustomBtn = document.getElementById('add-custom-btn');
 
+// Tab Button Additions
+const tabPresetBtn = document.getElementById('tab-preset-btn');
+const tabCustomBtn = document.getElementById('tab-custom-btn');
+
 // Analytics Graph Node Map
 const fillPreset = document.getElementById('chart-fill-preset');
 const fillCustom = document.getElementById('chart-fill-custom');
@@ -61,29 +65,24 @@ let catQuestsVal = parseFloat(localStorage.getItem('catQuestsVal')) || 0.0;
 // Track status indices of quest challenges
 let completedQuestIds = JSON.parse(localStorage.getItem('completedQuestIds')) || [];
 
-// 4. Initial Launch Sequencing
-goalInput.value = monthlyGoal;
-goalTargetDisplay.textContent = monthlyGoal;
-setRandomTip();
-loadSavedHistory();
-renderChallenges();
-updateUI();
-
-// 5. Interface Layout Switching Function (Form Tabs)
-window.switchLogTab = function(tabType) {
+// 4. Interface Layout Switching Function (Form Tabs Event Wiring)
+function switchLogTab(tabType) {
   document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
   document.querySelectorAll('.tab-view').forEach(view => view.classList.remove('active'));
   
   if (tabType === 'preset') {
-    document.querySelector("button[onclick*='preset']").classList.add('active');
+    tabPresetBtn.classList.add('active');
     document.getElementById('preset-tab-view').classList.add('active');
   } else {
-    document.querySelector("button[onclick*='custom']").classList.add('active');
+    tabCustomBtn.classList.add('active');
     document.getElementById('custom-tab-view').classList.add('active');
   }
-};
+}
 
-// 6. Dynamic Evaluation Engine (Renders metrics, graphs, trophies & leaderboard)
+tabPresetBtn.addEventListener('click', () => switchLogTab('preset'));
+tabCustomBtn.addEventListener('click', () => switchLogTab('custom'));
+
+// 5. Dynamic Evaluation Engine (Renders metrics, graphs, trophies & leaderboard)
 function updateUI() {
   totalSavedDisplay.textContent = totalCO2Saved.toFixed(1);
   streakCountDisplay.textContent = loggedActionCount;
@@ -147,7 +146,7 @@ function updateUI() {
   localStorage.setItem('catQuestsVal', catQuestsVal);
 }
 
-// 7. Core Inputs Management
+// 6. Core Inputs Management
 addBtn.addEventListener('click', function() {
   const value = parseFloat(actionSelect.value);
   const text = actionSelect.options[actionSelect.selectedIndex].getAttribute('data-text');
@@ -173,7 +172,7 @@ addCustomBtn.addEventListener('click', function() {
   customValueInput.value = '';
 });
 
-// 8. History Log Integration Core Logic
+// 7. History Log Integration Core Logic
 function logActionToHistory(description, outputValue) {
   const placeholder = historyList.querySelector('.empty-log-msg');
   if (placeholder) historyList.innerHTML = '';
@@ -192,7 +191,7 @@ function logActionToHistory(description, outputValue) {
   updateUI();
 }
 
-// 9. Challenge Quest Generator Core System
+// 8. Challenge Quest Generator Core System
 function renderChallenges() {
   challengesContainer.innerHTML = '';
   currentQuests.forEach(quest => {
@@ -206,15 +205,24 @@ function renderChallenges() {
         <strong>${quest.title}</strong>
         <span>${quest.desc} (+${quest.reward} kg)</span>
       </div>
-      <div id="status-box-${quest.id}">
-        ${isDone ? '<span class="quest-done">✅ Claimeded</span>' : `<button class="btn-quest" onclick="claimQuest('${quest.id}', ${quest.reward})">Claim</button>`}
-      </div>
+      <div id="status-box-${quest.id}"></div>
     `;
     challengesContainer.appendChild(row);
+
+    const statusBox = row.querySelector(`#status-box-${quest.id}`);
+    if (isDone) {
+      statusBox.innerHTML = '<span class="quest-done">✅ Claimed</span>';
+    } else {
+      const btn = document.createElement('button');
+      btn.className = "btn-quest";
+      btn.textContent = "Claim";
+      btn.addEventListener('click', () => claimQuest(quest.id, quest.reward));
+      statusBox.appendChild(btn);
+    }
   });
 }
 
-window.claimQuest = function(id, value) {
+function claimQuest(id, value) {
   completedQuestIds.push(id);
   localStorage.setItem('completedQuestIds', JSON.stringify(completedQuestIds));
   
@@ -222,10 +230,10 @@ window.claimQuest = function(id, value) {
   
   // Transform structural buttons instantly inside targeting container
   document.getElementById(`status-box-${id}`).innerHTML = '<span class="quest-done">✅ Claimed</span>';
-  logActionToHistory(`Quest: ${currentQuests.find(q=>q.id===id).title}`, value);
-};
+  logActionToHistory(`Quest: ${currentQuests.find(q => q.id === id).title}`, value);
+}
 
-// 10. Update Goal Threshold Target Parameters
+// 9. Update Goal Threshold Target Parameters
 updateGoalBtn.addEventListener('click', function() {
   const val = parseFloat(goalInput.value);
   if (!isNaN(val) && val >= 5) {
@@ -240,7 +248,7 @@ updateGoalBtn.addEventListener('click', function() {
   }
 });
 
-// 11. Plain Text Project Summary Report Exporter
+// 10. Plain Text Project Summary Report Exporter
 downloadReportBtn.addEventListener('click', function() {
   if (loggedActionCount === 0) {
     alert("Log an action first to generate a summary report!");
@@ -270,6 +278,14 @@ downloadReportBtn.addEventListener('click', function() {
 // Loader & Housekeeping Helpers
 function loadSavedHistory() { if (savedHistoryHTML.trim() !== "") historyList.innerHTML = savedHistoryHTML; }
 function setRandomTip() { climateTipDisplay.textContent = climateTips[Math.floor(Math.random() * climateTips.length)]; }
+
+// 11. Initial Launch Sequencing
+goalInput.value = monthlyGoal;
+goalTargetDisplay.textContent = monthlyGoal;
+setRandomTip();
+loadSavedHistory();
+renderChallenges();
+updateUI();
 
 // 12. Full Purge Operations Link Handle
 resetBtn.addEventListener('click', function() {
