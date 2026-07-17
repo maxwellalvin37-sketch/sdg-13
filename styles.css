@@ -1,13 +1,13 @@
 /* --- Design System & Color Palette --- */
 :root {
-  --bg-color: #f4f7f5;          /* Soft, eco-friendly light gray/green */
-  --card-bg: #ffffff;          /* Clean white for the main app container */
-  --primary-green: #2d6a4f;    /* Deep earthy green for primary buttons and headers */
-  --accent-green: #52b788;     /* Vibrant green for progress bars and success states */
-  --text-dark: #2d3142;        /* Dark charcoal for readable body text */
-  --text-muted: #6c757d;       /* Muted gray for secondary labels */
-  --border-color: #e2e8f0;     /* Soft border lines */
-  --danger-red: #d90429;       /* Red for the reset button */
+  --bg-color: #f4f7f5;          
+  --card-bg: #ffffff;          
+  --primary-green: #2d6a4f;    
+  --accent-green: #52b788;     
+  --text-dark: #2d3142;        
+  --text-muted: #6c757d;       
+  --border-color: #e2e8f0;     
+  --danger-red: #d90429;       
 }
 
 /* --- Base Resets --- */
@@ -25,7 +25,7 @@ body {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  padding: 20px;
+  padding: 40px 20px;
 }
 
 /* --- Typography --- */
@@ -47,12 +47,12 @@ h1, h2, h3 {
 
 .header {
   text-align: center;
-  margin-bottom: 25px;
+  margin-bottom: 20px;
 }
 
 .header h1 {
   font-size: 1.6rem;
-  margin-bottom: 5px;
+  margin-bottom: 8px;
 }
 
 .sdg-badge {
@@ -65,33 +65,76 @@ h1, h2, h3 {
   color: var(--primary-green);
   padding: 4px 12px;
   border-radius: 20px;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
+}
+
+/* --- Dynamic Eco Rank Badges --- */
+[id="eco-badge"] {
+  display: inline-block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 6px;
+  margin-top: 5px;
+}
+.badge-novice { background-color: #e2e8f0; color: #4a5568; }
+.badge-helper { background-color: #d8f3dc; color: #1b4332; }
+.badge-hero { background-color: #ffd166; color: #7f5539; font-weight: bold; }
+
+/* --- Goal Customizer Form Layout --- */
+.config-section {
+  background-color: #f8fafc;
+  border: 1px dashed var(--border-color);
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.goal-input-group {
+  display: flex;
+  gap: 10px;
+}
+
+.config-section input {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  font-size: 0.9rem;
+  outline: none;
+}
+
+.config-section button {
+  width: auto;
+  padding: 8px 15px;
+  font-size: 0.85rem;
+  background-color: var(--text-dark);
+  color: #fff;
 }
 
 /* --- Form Controls --- */
 .input-section {
-  margin-bottom: 30px;
+  margin-bottom: 25px;
 }
 
 label {
   display: block;
-  font-size: 0.9rem;
-  font-weight: 500;
-  margin-bottom: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 6px;
   color: var(--text-dark);
 }
 
 select {
   width: 100%;
   padding: 12px;
-  font-size: 1rem;
+  font-size: 0.95rem;
   border: 2px solid var(--border-color);
   border-radius: 8px;
   background-color: #fff;
   color: var(--text-dark);
   outline: none;
-  transition: border-color 0.2s ease;
-  margin-bottom: 15px;
+  margin-bottom: 12px;
 }
 
 select:focus {
@@ -108,7 +151,7 @@ button {
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.2s ease, transform 0.1s ease;
+  transition: all 0.2s ease;
 }
 
 .btn-add {
@@ -116,13 +159,8 @@ button {
   color: #ffffff;
 }
 
-.btn-add:hover {
-  background-color: #1b4332;
-}
-
-.btn-add:active {
-  transform: scale(0.98);
-}
+.btn-add:hover { background-color: #1b4332; }
+.btn-add:active { transform: scale(0.98); }
 
 .btn-reset {
   background-color: transparent;
@@ -131,69 +169,47 @@ button {
   margin-top: 20px;
   padding: 6px;
 }
+.btn-reset:hover { color: var(--danger-red); text-decoration: underline; }
 
-.btn-reset:hover {
-  color: var(--danger-red);
-  text-decoration: underline;
-}
-
-/* --- Progress Section --- */
+/* --- Progress Section & Streak --- */
 .progress-section {
   background-color: #fafbfc;
   border: 1px solid var(--border-color);
   padding: 20px;
   border-radius: 12px;
   text-align: center;
+  position: relative;
 }
 
-.stats-display {
-  margin-bottom: 15px;
+.streak-banner {
+  font-size: 0.8rem;
+  font-weight: 600;
+  background-color: #fff3cd;
+  color: #856404;
+  padding: 3px 10px;
+  border-radius: 4px;
+  display: inline-block;
+  margin-bottom: 10px;
 }
 
-.total-number {
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: var(--primary-green);
-  line-height: 1;
-}
-
-.total-unit {
-  font-size: 1rem;
-  font-weight: 500;
-  color: var(--text-muted);
-}
-
-.goal-text {
-  font-size: 0.85rem;
-  color: var(--text-muted);
-  margin-top: 5px;
-}
+.stats-display { margin-bottom: 15px; }
+.total-number { font-size: 2.5rem; font-weight: 700; color: var(--primary-green); line-height: 1; }
+.total-unit { font-size: 0.95rem; font-weight: 500; color: var(--text-muted); }
+.goal-text { font-size: 0.85rem; color: var(--text-muted); margin-top: 5px; }
 
 /* --- Congratulations Alert Styles --- */
 #congrats-msg {
   background-color: #e9f5ed;
   color: var(--primary-green);
   border: 1px solid var(--accent-green);
-  padding: 12px;
+  padding: 10px;
   border-radius: 8px;
-  font-size: 0.9rem;
-  margin: 15px 0;
+  font-size: 0.85rem;
+  margin: 12px 0;
   transition: all 0.4s ease;
 }
-
-/* Completely hides element from view and layout sizing */
-.congrats-hidden {
-  display: none;
-  opacity: 0;
-  transform: scale(0.95);
-}
-
-/* Class applied by JS to animate smoothly into visibility */
-.congrats-visible {
-  display: block !important;
-  opacity: 1;
-  transform: scale(1);
-}
+.congrats-hidden { display: none; opacity: 0; }
+.congrats-visible { display: block !important; opacity: 1; }
 
 /* --- Progress Bar --- */
 .progress-container {
@@ -210,5 +226,52 @@ button {
   height: 100%;
   width: 0%; 
   border-radius: 10px;
-  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: width 0.4s ease;
+}
+
+/* --- Feature 4: History Logger Section Styles --- */
+.history-section {
+  margin-top: 25px;
+  border-top: 1px solid var(--border-color);
+  padding-top: 20px;
+}
+
+.history-section h3 {
+  font-size: 1rem;
+  margin-bottom: 10px;
+}
+
+#history-list {
+  list-style: none;
+  max-height: 150px;
+  overflow-y: auto;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background-color: #fdfdfd;
+}
+
+#history-list li {
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  border-bottom: 1px solid #f1f5f9;
+  display: flex;
+  justify-content: space-between;
+  color: #475569;
+}
+
+#history-list li:last-child {
+  border-bottom: none;
+}
+
+.empty-log-msg {
+  color: var(--text-muted) !important;
+  font-style: italic;
+  text-align: center;
+  display: block !important;
+  padding: 15px !important;
+}
+
+.timestamp {
+  font-size: 0.75rem;
+  color: var(--text-muted);
 }
