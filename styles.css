@@ -169,6 +169,32 @@ button {
   margin-top: 5px;
 }
 
+/* --- Congratulations Alert Styles --- */
+#congrats-msg {
+  background-color: #e9f5ed;
+  color: var(--primary-green);
+  border: 1px solid var(--accent-green);
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  margin: 15px 0;
+  transition: all 0.4s ease;
+}
+
+/* Completely hides element from view and layout sizing */
+.congrats-hidden {
+  display: none;
+  opacity: 0;
+  transform: scale(0.95);
+}
+
+/* Class applied by JS to animate smoothly into visibility */
+.congrats-visible {
+  display: block !important;
+  opacity: 1;
+  transform: scale(1);
+}
+
 /* --- Progress Bar --- */
 .progress-container {
   background-color: var(--border-color);
