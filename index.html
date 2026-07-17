@@ -65,21 +65,35 @@
         <div class="progress-bar" id="progress-bar"></div>
       </div>
 
-      <!-- New Feature: Real-World Equivalence Display Box -->
+      <!-- Real-World Equivalence Display Box -->
       <div class="equivalence-box">
-        💡 <strong>Your Real-World Impact:</strong> Equivalent to avoiding the $CO_2$ emissions of charging <span id="phone-count" style="font-weight: 600; color: var(--primary-green);">0</span> smartphones!
+        <div class="eq-item">📱 Charged: <span id="phone-count" class="stat-highlight">0</span> phones</div>
+        <!-- Feature 1: Tree Visualizer Metric -->
+        <div class="eq-item">🌳 Yearly Tree Absorption Value: <span id="tree-count" class="stat-highlight">0.00</span> days</div>
       </div>
+    </div>
+
+    <!-- Feature 2: Interactive Eco-Quiz Card Section -->
+    <div class="quiz-section">
+      <span class="section-title">🧠 Mini Climate Quiz Challenge</span>
+      <p id="quiz-question">Loading question...</p>
+      <div class="quiz-options" id="quiz-options-container"></div>
+      <p id="quiz-feedback" class="quiz-feedback-hidden"></p>
     </div>
 
     <!-- Interactive Activity History Log -->
     <div class="history-section">
-      <h3>Activity History Log</h3>
+      <div class="history-header">
+        <h3>Activity History Log</h3>
+        <!-- Feature 3: Project Summary Export Button -->
+        <button id="download-report-btn" class="btn-secondary">📋 Export Summary</button>
+      </div>
       <ul id="history-list">
         <li class="empty-log-msg">No actions logged yet. Start saving carbon!</li>
       </ul>
     </div>
 
-    <!-- New Feature: Rotating Daily Climate Tip Container -->
+    <!-- Rotating Daily Climate Tip Footer -->
     <div class="tip-section">
       <span class="tip-title">💡 Did You Know?</span>
       <p id="climate-tip">Small actions added up by thousands of people make a massive worldwide difference.</p>
