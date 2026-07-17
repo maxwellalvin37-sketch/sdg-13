@@ -1,1 +1,188 @@
+/* --- Design System & Color Palette --- */
+:root {
+  --bg-color: #f4f7f5;          /* Soft, eco-friendly light gray/green */
+  --card-bg: #ffffff;          /* Clean white for the main app container */
+  --primary-green: #2d6a4f;    /* Deep earthy green for primary buttons and headers */
+  --accent-green: #52b788;     /* Vibrant green for progress bars and success states */
+  --text-dark: #2d3142;        /* Dark charcoal for readable body text */
+  --text-muted: #6c757d;       /* Muted gray for secondary labels */
+  --border-color: #e2e8f0;     /* Soft border lines */
+  --danger-red: #d90429;       /* Red for the reset button */
+}
 
+/* --- Base Resets --- */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-dark);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+/* --- Typography --- */
+h1, h2, h3 {
+  font-family: 'Poppins', sans-serif;
+  color: var(--primary-green);
+}
+
+/* --- App Layout Layout --- */
+.tracker-card {
+  background-color: var(--card-bg);
+  width: 100%;
+  max-width: 500px;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(45, 106, 79, 0.08);
+  border: 1px solid var(--border-color);
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.header h1 {
+  font-size: 1.6rem;
+  margin-bottom: 5px;
+}
+
+.sdg-badge {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  background-color: #e9f5ed;
+  color: var(--primary-green);
+  padding: 4px 12px;
+  border-radius: 20px;
+  margin-bottom: 10px;
+}
+
+/* --- Form Controls --- */
+.input-section {
+  margin-bottom: 30px;
+}
+
+label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 8px;
+  color: var(--text-dark);
+}
+
+select {
+  width: 100%;
+  padding: 12px;
+  font-size: 1rem;
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  background-color: #fff;
+  color: var(--text-dark);
+  outline: none;
+  transition: border-color 0.2s ease;
+  margin-bottom: 15px;
+}
+
+select:focus {
+  border-color: var(--accent-green);
+}
+
+/* --- Buttons --- */
+button {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 1rem;
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.btn-add {
+  background-color: var(--primary-green);
+  color: #ffffff;
+}
+
+.btn-add:hover {
+  background-color: #1b4332;
+}
+
+.btn-add:active {
+  transform: scale(0.98);
+}
+
+.btn-reset {
+  background-color: transparent;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  margin-top: 20px;
+  padding: 6px;
+}
+
+.btn-reset:hover {
+  color: var(--danger-red);
+  text-decoration: underline;
+}
+
+/* --- Progress Section --- */
+.progress-section {
+  background-color: #fafbfc;
+  border: 1px solid var(--border-color);
+  padding: 20px;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.stats-display {
+  margin-bottom: 15px;
+}
+
+.total-number {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--primary-green);
+  line-height: 1;
+}
+
+.total-unit {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.goal-text {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-top: 5px;
+}
+
+/* --- Progress Bar --- */
+.progress-container {
+  background-color: var(--border-color);
+  border-radius: 10px;
+  height: 16px;
+  width: 100%;
+  overflow: hidden;
+  margin-top: 10px;
+}
+
+.progress-bar {
+  background-color: var(--accent-green);
+  height: 100%;
+  width: 0%; 
+  border-radius: 10px;
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
