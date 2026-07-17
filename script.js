@@ -1,309 +1,341 @@
-// 1. Core Document Element Node Connections
-const actionSelect = document.getElementById('action-select');
-const addBtn = document.getElementById('add-btn');
-const totalSavedDisplay = document.getElementById('total-saved');
-const progressBar = document.getElementById('progress-bar');
-const resetBtn = document.getElementById('reset-btn');
-const goalTargetDisplay = document.getElementById('goal-target');
-const congratsMsg = document.getElementById('congrats-msg');
-const ecoBadge = document.getElementById('eco-badge');
-const goalInput = document.getElementById('goal-input');
-const updateGoalBtn = document.getElementById('update-goal-btn');
-const streakCountDisplay = document.getElementById('streak-count');
-const historyList = document.getElementById('history-list');
-const phoneCountDisplay = document.getElementById('phone-count');
-const treeCountDisplay = document.getElementById('tree-count');
-const climateTipDisplay = document.getElementById('climate-tip');
-const downloadReportBtn = document.getElementById('download-report-btn');
+// ==========================================================================
+// App State Properties & Initialization Data
+// ==========================================================================
+let state = {
+  totalSaved: 0.0,
+  monthlyGoal: 50,
+  actionCount: 0,
+  breakdown: { preset: 0.0, custom: 0.0, quests: 0.0 },
+  history: [],
+  completedQuests: []
+};
 
-// Custom Input Additions
-const customNameInput = document.getElementById('custom-name');
-const customValueInput = document.getElementById('custom-value');
-const addCustomBtn = document.getElementById('add-custom-btn');
-
-// Tab Button Additions
-const tabPresetBtn = document.getElementById('tab-preset-btn');
-const tabCustomBtn = document.getElementById('tab-custom-btn');
-
-// Analytics Graph Node Map
-const fillPreset = document.getElementById('chart-fill-preset');
-const fillCustom = document.getElementById('chart-fill-custom');
-const fillQuests = document.getElementById('chart-fill-quests');
-const valPreset = document.getElementById('chart-val-preset');
-const valCustom = document.getElementById('chart-val-custom');
-const valQuests = document.getElementById('chart-val-quests');
-
-// Gamified Challenges & Leaderboard Handles
-const challengesContainer = document.getElementById('challenges-list-container');
-const userLeaderboardScore = document.getElementById('user-leaderboard-score');
-const userRankNum = document.getElementById('user-rank-num');
-
-// 2. Mock Databases (Tips & Active Challenge Sets)
-const climateTips = [
-  "Switching laundry cycles to cold cycles preserves fabric integrity while reducing up to 90% of structural appliance energy draws.",
-  "Food manufacturing output processes comprise roughly 26% of tracking planetary warming emissions outputs.",
-  "Leaving active transformation bricks plugged in draws secondary phantom vampire loading lines continuously.",
-  "Transitioning simple grocery logistics into a canvas bag cuts processing waste counts significantly over time."
+const RANDOM_TIPS = [
+  "Small actions added up by thousands of people make a massive worldwide difference.",
+  "Replacing a short driving commute with walking saves roughly 0.24kg of CO2 per kilometer.",
+  "LED light bulbs consume up to 85% less power than standard traditional variants.",
+  "Fixing a leaky hot water tap can save substantial energy used for heating utility reservoirs."
 ];
 
-const currentQuests = [
-  { id: "q1", title: "Eco-Informed", desc: "Unplugged unused home electronics for 5 hours", reward: 2.5 },
-  { id: "q2", title: "Conservation Master", desc: "Took a short shower under 4 minutes", reward: 1.8 }
+const WEEKLY_QUESTS = [
+  { id: "q1", title: "Energy Auditor", reward: 2.5, desc: "Turn off all standby electronics overnight (+2.5 kg)" },
+  { id: "q2", title: "Local Food Warrior", reward: 4.0, desc: "Source your ingredients entirely locally (+4.0 kg)" }
 ];
 
-// 3. Central Application State Variables (with LocalStorage Syncing)
-let totalCO2Saved = parseFloat(localStorage.getItem('totalCO2Saved')) || 0.0;
-let monthlyGoal = parseFloat(localStorage.getItem('monthlyGoal')) || 50.0;
-let loggedActionCount = parseInt(localStorage.getItem('loggedActionCount')) || 0;
-let savedHistoryHTML = localStorage.getItem('savedHistoryHTML') || '';
-
-// Analytics tracking sub-allocations
-let catPresetVal = parseFloat(localStorage.getItem('catPresetVal')) || 0.0;
-let catCustomVal = parseFloat(localStorage.getItem('catCustomVal')) || 0.0;
-let catQuestsVal = parseFloat(localStorage.getItem('catQuestsVal')) || 0.0;
-
-// Track status indices of quest challenges
-let completedQuestIds = JSON.parse(localStorage.getItem('completedQuestIds')) || [];
-
-// 4. Interface Layout Switching Function (Form Tabs Event Wiring)
-function switchLogTab(tabType) {
-  document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-  document.querySelectorAll('.tab-view').forEach(view => view.classList.remove('active'));
+// ==========================================================================
+// DOM Elements Map Selector
+// ==========================================================================
+const DOM = {
+  tabPreset: document.getElementById('tab-preset-btn'),
+  tabCustom: document.getElementById('tab-custom-btn'),
+  viewPreset: document.getElementById('preset-tab-view'),
+  viewCustom: document.getElementById('custom-tab-view'),
   
-  if (tabType === 'preset') {
-    tabPresetBtn.classList.add('active');
-    document.getElementById('preset-tab-view').classList.add('active');
-  } else {
-    tabCustomBtn.classList.add('active');
-    document.getElementById('custom-tab-view').classList.add('active');
+  goalInput: document.getElementById('goal-input'),
+  updateGoalBtn: document.getElementById('update-goal-btn'),
+  goalTargetDisplay: document.getElementById('goal-target'),
+  
+  actionSelect: document.getElementById('action-select'),
+  addPresetBtn: document.getElementById('add-btn'),
+  
+  customName: document.getElementById('custom-name'),
+  customValue: document.getElementById('custom-value'),
+  addCustomBtn: document.getElementById('add-custom-btn'),
+  
+  challengesContainer: document.getElementById('challenges-list-container'),
+  
+  streakCount: document.getElementById('streak-count'),
+  totalSaved: document.getElementById('total-saved'),
+  progressBar: document.getElementById('progress-bar'),
+  congratsMsg: document.getElementById('congrats-msg'),
+  ecoBadge: document.getElementById('eco-badge'),
+  
+  phoneCount: document.getElementById('phone-count'),
+  treeCount: document.getElementById('tree-count'),
+  
+  fillPreset: document.getElementById('chart-fill-preset'),
+  fillCustom: document.getElementById('chart-fill-custom'),
+  fillQuests: document.getElementById('chart-fill-quests'),
+  valPreset: document.getElementById('chart-val-preset'),
+  valCustom: document.getElementById('chart-val-custom'),
+  valQuests: document.getElementById('chart-val-quests'),
+  
+  trophyFirst: document.getElementById('trophy-first'),
+  trophyHalf: document.getElementById('trophy-half'),
+  trophyGoal: document.getElementById('trophy-goal'),
+  
+  userScore: document.getElementById('user-leaderboard-score'),
+  historyList: document.getElementById('history-list'),
+  climateTip: document.getElementById('climate-tip'),
+  
+  downloadBtn: document.getElementById('download-report-btn'),
+  resetBtn: document.getElementById('reset-btn')
+};
+
+// ==========================================================================
+// Core State & Sync Handlers
+// ==========================================================================
+function init() {
+  const savedData = localStorage.getItem('sdg13_tracker_data');
+  if (savedData) {
+    try {
+      state = JSON.parse(savedData);
+    } catch (e) {
+      console.error("Error reading saved tracker data profile state.", e);
+    }
   }
+  
+  setupListeners();
+  renderQuests();
+  updateUI();
+  rotateTip();
 }
 
-tabPresetBtn.addEventListener('click', () => switchLogTab('preset'));
-tabCustomBtn.addEventListener('click', () => switchLogTab('custom'));
+function saveToStorage() {
+  localStorage.setItem('sdg13_tracker_data', JSON.stringify(state));
+}
 
-// 5. Dynamic Evaluation Engine (Renders metrics, graphs, trophies & leaderboard)
+// ==========================================================================
+// UI Rendering Pipeline
+// ==========================================================================
 function updateUI() {
-  totalSavedDisplay.textContent = totalCO2Saved.toFixed(1);
-  streakCountDisplay.textContent = loggedActionCount;
-  userLeaderboardScore.textContent = totalCO2Saved.toFixed(1) + " kg";
+  // Numeric Stats
+  DOM.totalSaved.textContent = state.totalSaved.toFixed(1);
+  DOM.goalTargetDisplay.textContent = state.monthlyGoal;
+  DOM.goalInput.value = state.monthlyGoal;
+  DOM.streakCount.textContent = state.actionCount;
+  DOM.userScore.textContent = `${state.totalSaved.toFixed(1)} kg`;
 
-  // Equivalencies mapping
-  phoneCountDisplay.textContent = Math.floor(totalCO2Saved * 121).toLocaleString();
-  treeCountDisplay.textContent = ((totalCO2Saved / 22) * 365).toFixed(2);
+  // Progress Bar Calculations
+  const progressPercent = Math.min((state.totalSaved / state.monthlyGoal) * 100, 100);
+  DOM.progressBar.style.width = `${progressPercent}%`;
 
-  // 30kg milestone alert
-  if (totalCO2Saved >= 30.0) {
-    congratsMsg.className = "congrats-visible";
+  // Milestone Alert Logic (Triggered at 30kg)
+  if (state.totalSaved >= 30) {
+    DOM.congratsMsg.className = "congrats-visible";
   } else {
-    congratsMsg.className = "congrats-hidden";
+    DOM.congratsMsg.className = "congrats-hidden";
   }
 
-  // Dynamic ranking logic
-  if (totalCO2Saved >= 40.0) {
-    ecoBadge.textContent = "Rank: Climate Hero 🏆"; ecoBadge.className = "badge-hero";
-  } else if (totalCO2Saved >= 15.0) {
-    ecoBadge.textContent = "Rank: Eco-Helper 🌿"; ecoBadge.className = "badge-helper";
+  // Eco Ranks Engine
+  if (state.totalSaved >= 50) {
+    DOM.ecoBadge.className = "badge-champion";
+    DOM.ecoBadge.textContent = "Rank: Eco-Champion 👑";
+  } else if (state.totalSaved >= 20) {
+    DOM.ecoBadge.className = "badge-warrior";
+    DOM.ecoBadge.textContent = "Rank: Eco-Warrior ⛰️";
   } else {
-    ecoBadge.textContent = "Rank: Eco-Novice 🌱"; ecoBadge.className = "badge-novice";
+    DOM.ecoBadge.className = "badge-novice";
+    DOM.ecoBadge.textContent = "Rank: Eco-Novice 🌱";
   }
 
-  // Progress Bar rendering
-  let mainPercentage = (totalCO2Saved / monthlyGoal) * 100;
-  if (mainPercentage > 100) mainPercentage = 100;
-  progressBar.style.width = mainPercentage + '%';
+  // Equivalencies Math Rules
+  // 1kg CO2 = ~122 smartphone charges
+  // 1kg CO2 = ~0.06 tree absorption days (approx 16.5kg standard tree capacity year)
+  DOM.phoneCount.textContent = Math.floor(state.totalSaved * 122);
+  DOM.treeCount.textContent = (state.totalSaved * 0.06).toFixed(2);
 
-  // Render pure CSS Graph segments
-  valPreset.textContent = catPresetVal.toFixed(1) + "kg";
-  valCustom.textContent = catCustomVal.toFixed(1) + "kg";
-  valQuests.textContent = catQuestsVal.toFixed(1) + "kg";
+  // Pure CSS Charts Calculations
+  updateMicroChart(DOM.fillPreset, DOM.valPreset, state.breakdown.preset);
+  updateMicroChart(DOM.fillCustom, DOM.valCustom, state.breakdown.custom);
+  updateMicroChart(DOM.fillQuests, DOM.valQuests, state.breakdown.quests);
 
-  let maxDistribution = Math.max(catPresetVal, catCustomVal, catQuestsVal, 1.0);
-  fillPreset.style.width = ((catPresetVal / maxDistribution) * 100) + '%';
-  fillCustom.style.width = ((catCustomVal / maxDistribution) * 100) + '%';
-  fillQuests.style.width = ((catQuestsVal / maxDistribution) * 100) + '%';
+  // Lock & Key Achievements State Switcher
+  if (state.actionCount >= 1) DOM.trophyFirst.classList.remove('locked');
+  if (state.totalSaved >= 25) DOM.trophyHalf.classList.remove('locked');
+  if (state.totalSaved >= state.monthlyGoal) DOM.trophyGoal.classList.remove('locked');
 
-  // Gamified Leaderboard re-ranking calculations
-  if (totalCO2Saved > 64.5) {
-    userRankNum.textContent = "1";
-  } else if (totalCO2Saved > 12.2) {
-    userRankNum.textContent = "2";
-  } else {
-    userRankNum.textContent = "3";
-  }
-
-  // Dynamic Trophy Unlocks Tracker
-  if (loggedActionCount >= 1) document.getElementById('trophy-first').classList.add('unlocked');
-  if (totalCO2Saved >= 25.0) document.getElementById('trophy-half').classList.add('unlocked');
-  if (totalCO2Saved >= monthlyGoal) document.getElementById('trophy-goal').classList.add('unlocked');
-
-  // Sync state data safely to LocalStorage
-  localStorage.setItem('totalCO2Saved', totalCO2Saved);
-  localStorage.setItem('monthlyGoal', monthlyGoal);
-  localStorage.setItem('loggedActionCount', loggedActionCount);
-  localStorage.setItem('catPresetVal', catPresetVal);
-  localStorage.setItem('catCustomVal', catCustomVal);
-  localStorage.setItem('catQuestsVal', catQuestsVal);
+  // Activity Log Renderer
+  renderHistory();
 }
 
-// 6. Core Inputs Management
-addBtn.addEventListener('click', function() {
-  const value = parseFloat(actionSelect.value);
-  const text = actionSelect.options[actionSelect.selectedIndex].getAttribute('data-text');
-  
-  catPresetVal += value;
-  logActionToHistory(text, value);
-});
+function updateMicroChart(barFill, labelElement, categoryValue) {
+  const maximumTrack = Math.max(state.breakdown.preset, state.breakdown.custom, state.breakdown.quests, 1);
+  const scalePercent = (categoryValue / maximumTrack) * 100;
+  barFill.style.width = `${scalePercent}%`;
+  labelElement.textContent = `${categoryValue.toFixed(1)}kg`;
+}
 
-addCustomBtn.addEventListener('click', function() {
-  const titleText = customNameInput.value.trim();
-  const rawNumVal = parseFloat(customValueInput.value);
-
-  if (titleText === "" || isNaN(rawNumVal) || rawNumVal <= 0) {
-    alert("Please fill out both custom fields correctly (value must be greater than zero).");
+function renderHistory() {
+  DOM.historyList.innerHTML = "";
+  if (state.history.length === 0) {
+    DOM.historyList.innerHTML = `<li class="empty-log-msg">No actions logged yet. Start saving carbon!</li>`;
     return;
   }
 
-  catCustomVal += rawNumVal;
-  logActionToHistory(titleText, rawNumVal);
+  // Render recent logs top-first
+  [...state.history].reverse().forEach(item => {
+    const li = document.createElement('li');
+    li.innerHTML = `<span>${item.text}</span><strong>+${item.value.toFixed(1)} kg</strong>`;
+    DOM.historyList.appendChild(li);
+  });
+}
 
-  // Clear tracking inputs
-  customNameInput.value = '';
-  customValueInput.value = '';
-});
+function renderQuests() {
+  DOM.challengesContainer.innerHTML = "";
+  WEEKLY_QUESTS.forEach(quest => {
+    const isClaimed = state.completedQuests.includes(quest.id);
+    const box = document.createElement('div');
+    box.className = "quest-item-box";
+    
+    box.innerHTML = `
+      <div class="quest-details">
+        <h4>${quest.title}</h4>
+        <p>${quest.desc}</p>
+      </div>
+      <button class="btn-quest-claim ${isClaimed ? 'claimed' : ''}" data-id="${quest.id}" ${isClaimed ? 'disabled' : ''}>
+        ${isClaimed ? 'Claimed' : 'Claim'}
+      </button>
+    `;
+    DOM.challengesContainer.appendChild(box);
+  });
+}
 
-// 7. History Log Integration Core Logic
-function logActionToHistory(description, outputValue) {
-  const placeholder = historyList.querySelector('.empty-log-msg');
-  if (placeholder) historyList.innerHTML = '';
+function rotateTip() {
+  const idx = Math.floor(Math.random() * RANDOM_TIPS.length);
+  DOM.climateTip.textContent = RANDOM_TIPS[idx];
+}
 
-  totalCO2Saved += outputValue;
-  loggedActionCount++;
+// ==========================================================================
+// Action Loggers & Logic Flow Actions
+// ==========================================================================
+function addCarbonReduction(value, actionText, type) {
+  const numericVal = parseFloat(value);
+  if (isNaN(numericVal) || numericVal <= 0) return;
 
-  const item = document.createElement('li');
-  const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-  item.innerHTML = `<span><strong>${description}</strong> (+${outputValue.toFixed(1)} kg)</span><span class="timestamp">${time}</span>`;
+  state.totalSaved += numericVal;
+  state.actionCount += 1;
+  state.breakdown[type] += numericVal;
   
-  historyList.insertBefore(item, historyList.firstChild);
-  localStorage.setItem('savedHistoryHTML', historyList.innerHTML);
-  
-  setRandomTip();
+  state.history.push({
+    text: actionText,
+    value: numericVal,
+    timestamp: new Date().toISOString()
+  });
+
+  saveToStorage();
   updateUI();
 }
 
-// 8. Challenge Quest Generator Core System
-function renderChallenges() {
-  challengesContainer.innerHTML = '';
-  currentQuests.forEach(quest => {
-    const row = document.createElement('div');
-    row.className = "quest-row";
-    
-    const isDone = completedQuestIds.includes(quest.id);
-    
-    row.innerHTML = `
-      <div class="quest-info">
-        <strong>${quest.title}</strong>
-        <span>${quest.desc} (+${quest.reward} kg)</span>
-      </div>
-      <div id="status-box-${quest.id}"></div>
-    `;
-    challengesContainer.appendChild(row);
+// ==========================================================================
+// Event Listeners Routing Wireframe
+// ==========================================================================
+function setupListeners() {
+  // View Form Tab Alternators
+  DOM.tabPreset.addEventListener('click', () => {
+    DOM.tabPreset.classList.add('active');
+    DOM.tabCustom.classList.remove('active');
+    DOM.viewPreset.classList.add('active');
+    DOM.viewCustom.classList.remove('active');
+  });
 
-    const statusBox = row.querySelector(`#status-box-${quest.id}`);
-    if (isDone) {
-      statusBox.innerHTML = '<span class="quest-done">✅ Claimed</span>';
+  DOM.tabCustom.addEventListener('click', () => {
+    DOM.tabCustom.classList.add('active');
+    DOM.tabPreset.classList.remove('active');
+    DOM.viewCustom.classList.add('active');
+    DOM.viewPreset.classList.remove('active');
+  });
+
+  // Target Goal Configurations
+  DOM.updateGoalBtn.addEventListener('click', () => {
+    const val = parseInt(DOM.goalInput.value);
+    if (!isNaN(val) && val >= 5 && val <= 500) {
+      state.monthlyGoal = val;
+      saveToStorage();
+      updateUI();
+    }
+  });
+
+  // Action Submission Handlers
+  DOM.addPresetBtn.addEventListener('click', () => {
+    const option = DOM.actionSelect.options[DOM.actionSelect.selectedIndex];
+    const val = option.value;
+    const txt = option.getAttribute('data-text') || option.textContent;
+    addCarbonReduction(val, txt, 'preset');
+  });
+
+  DOM.addCustomBtn.addEventListener('click', () => {
+    const name = DOM.customName.value.trim();
+    const val = DOM.customValue.value;
+    
+    if (!name) {
+      alert("Please provide an action title for your custom log entry.");
+      return;
+    }
+    if (!val || parseFloat(val) <= 0) {
+      alert("Please specify a baseline positive metric number of carbon saved.");
+      return;
+    }
+    
+    addCarbonReduction(val, name, 'custom');
+    DOM.customName.value = "";
+    DOM.customValue.value = "";
+  });
+
+  // Challenge Container Delegation Click Maps
+  DOM.challengesContainer.addEventListener('click', (e) => {
+    if (e.target.classList.contains('btn-quest-claim') && !e.target.classList.contains('claimed')) {
+      const qId = e.target.getAttribute('data-id');
+      const quest = WEEKLY_QUESTS.find(q => q.id === qId);
+      if (quest) {
+        state.completedQuests.push(qId);
+        addCarbonReduction(quest.reward, `Completed Quest: ${quest.title}`, 'quests');
+        renderQuests();
+      }
+    }
+  });
+
+  // Export Data Summary Plain-Text Report
+  DOM.downloadBtn.addEventListener('click', () => {
+    let output = `SDG 13 CARBON METRICS DATA REPORT\n`;
+    output += `==================================\n`;
+    output += `Total Carbon Offset Saved: ${state.totalSaved.toFixed(2)} kg\n`;
+    output += `Current Set Target Goal: ${state.monthlyGoal} kg\n`;
+    output += `Total Logs Written: ${state.actionCount}\n\n`;
+    output += `Distribution Analysis Logs:\n`;
+    output += `- Presets: ${state.breakdown.preset.toFixed(1)} kg\n`;
+    output += `- Customs: ${state.breakdown.custom.toFixed(1)} kg\n`;
+    output += `- Quests: ${state.breakdown.quests.toFixed(1)} kg\n\n`;
+    output += `Logged Timeline History Entries:\n`;
+    
+    if (state.history.length === 0) {
+      output += `No data items logged.`;
     } else {
-      const btn = document.createElement('button');
-      btn.className = "btn-quest";
-      btn.textContent = "Claim";
-      btn.addEventListener('click', () => claimQuest(quest.id, quest.reward));
-      statusBox.appendChild(btn);
+      state.history.forEach((h, i) => {
+        output += `[${i+1}] ${h.text} -> saved +${h.value.toFixed(1)}kg\n`;
+      });
+    }
+
+    const blob = new Blob([output], { type: 'text/plain' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'Carbon_Offset_Report.txt';
+    link.click();
+  });
+
+  // Flash Cleaner Reset Tracker Data
+  DOM.resetBtn.addEventListener('click', () => {
+    if (confirm("Are you sure you want to completely flush your metrics history tracker data?")) {
+      state = {
+        totalSaved: 0.0,
+        monthlyGoal: 50,
+        actionCount: 0,
+        breakdown: { preset: 0.0, custom: 0.0, quests: 0.0 },
+        history: [],
+        completedQuests: []
+      };
+      
+      // Force visual class updates back to locked paradigm state safely
+      DOM.trophyFirst.classList.add('locked');
+      DOM.trophyHalf.classList.add('locked');
+      DOM.trophyGoal.classList.add('locked');
+      
+      saveToStorage();
+      renderQuests();
+      updateUI();
     }
   });
 }
 
-function claimQuest(id, value) {
-  if (completedQuestIds.includes(id)) return; // Prevent double claims
-  
-  completedQuestIds.push(id);
-  localStorage.setItem('completedQuestIds', JSON.stringify(completedQuestIds));
-  
-  catQuestsVal += value;
-  
-  // Transform structural buttons instantly inside targeting container
-  document.getElementById(`status-box-${id}`).innerHTML = '<span class="quest-done">✅ Claimed</span>';
-  logActionToHistory(`Quest: ${currentQuests.find(q => q.id === id).title}`, value);
-}
-
-// 9. Update Goal Threshold Target Parameters
-updateGoalBtn.addEventListener('click', function() {
-  const val = parseFloat(goalInput.value);
-  if (!isNaN(val) && val >= 5) {
-    monthlyGoal = val;
-    goalTargetDisplay.textContent = monthlyGoal;
-    
-    // Reset achievement status dynamically if goals move outwards
-    if (totalCO2Saved < monthlyGoal) document.getElementById('trophy-goal').classList.remove('unlocked');
-    updateUI();
-  } else {
-    alert("Please enter valid configuration goal parameters above 5 kg.");
-  }
-});
-
-// 10. Plain Text Project Summary Report Exporter
-downloadReportBtn.addEventListener('click', function() {
-  if (loggedActionCount === 0) {
-    alert("Log an action first to generate a summary report!");
-    return;
-  }
-  let report = `=== SDG 13 PROJECT TRACKING SUMMARY REPORT ===\n`;
-  report += `Generated: ${new Date().toLocaleDateString()}\n\n`;
-  report += `Logged Actions Count: ${loggedActionCount}\n`;
-  report += `Total CO2 Reduction Metric: ${totalCO2Saved.toFixed(1)} kg\n`;
-  report += `Current Target Threshold Alignment Progress: ${((totalCO2Saved/monthlyGoal)*100).toFixed(0)}%\n\n`;
-  report += `--- LOG SOURCE DETAILS ---\n`;
-  report += `- Preset Drops: ${catPresetVal.toFixed(1)} kg\n`;
-  report += `- Custom Action Entries: ${catCustomVal.toFixed(1)} kg\n`;
-  report += `- Accomplished Quests Bonuses: ${catQuestsVal.toFixed(1)} kg\n`;
-  report += `==============================================\n`;
-  report += `Keep supporting environmental change targets!`;
-
-  const blob = new Blob([report], { type: "text/plain" });
-  const downloadLink = document.createElement("a");
-  downloadLink.href = URL.createObjectURL(blob);
-  downloadLink.download = "Carbon_Tracker_Report.txt";
-  document.body.appendChild(downloadLink);
-  downloadLink.click();
-  document.body.removeChild(downloadLink);
-});
-
-// Loader & Housekeeping Helpers
-function loadSavedHistory() { if (savedHistoryHTML.trim() !== "") historyList.innerHTML = savedHistoryHTML; }
-function setRandomTip() { climateTipDisplay.textContent = climateTips[Math.floor(Math.random() * climateTips.length)]; }
-
-// 11. Initial Launch Sequencing
-goalInput.value = monthlyGoal;
-goalTargetDisplay.textContent = monthlyGoal;
-setRandomTip();
-loadSavedHistory();
-renderChallenges();
-updateUI();
-
-// 12. Full Purge Operations Link Handle
-resetBtn.addEventListener('click', function() {
-  if (confirm("Are you sure you want to completely clear your progress parameters and local device history caches?")) {
-    localStorage.clear();
-    totalCO2Saved = 0.0; loggedActionCount = 0; monthlyGoal = 50.0;
-    catPresetVal = 0.0; catCustomVal = 0.0; catQuestsVal = 0.0;
-    completedQuestIds = [];
-    goalInput.value = 50; goalTargetDisplay.textContent = monthlyGoal;
-    historyList.innerHTML = '<li class="empty-log-msg">No actions logged yet. Start saving carbon!</li>';
-    
-    // Clear unlock classes visually from trophy boards
-    document.querySelectorAll('.trophy-item').forEach(el => el.classList.remove('unlocked'));
-    
-    setRandomTip();
-    renderChallenges();
-    updateUI();
-  }
-});
+// Kick off initialization loop lifecycle
+document.addEventListener('DOMContentLoaded', init);
