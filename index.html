@@ -8,7 +8,7 @@
   <!-- Google Fonts: Poppins (Headings) and Inter (Body text) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght=400;500&family=Poppins:wght=600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght=400;500;600&family=Poppins:wght=600;700&display=swap" rel="stylesheet">
   
   <!-- Link to external CSS file -->
   <link rel="stylesheet" href="styles.css">
@@ -21,17 +21,27 @@
     <div class="header">
       <span class="sdg-badge">SDG 13: Climate Action</span>
       <h1>Carbon Offset Tracker</h1>
-      <p style="color: var(--text-muted); font-size: 0.9rem;">Log your daily changes to combat climate change</p>
+      <!-- Feature 1: Eco Rank Badge Display -->
+      <div id="eco-badge" class="badge-novice">Rank: Eco-Novice 🌱</div>
+    </div>
+
+    <!-- Feature 2: Custom Goal Configurator -->
+    <div class="config-section">
+      <label for="goal-input">Set Your Monthly Goal (kg):</label>
+      <div class="goal-input-group">
+        <input type="number" id="goal-input" value="50" min="5" max="500">
+        <button id="update-goal-btn">Set Goal</button>
+      </div>
     </div>
 
     <!-- User Input Section -->
     <div class="input-section">
       <label for="action-select">Choose a lifestyle action you completed:</label>
       <select id="action-select">
-        <option value="1.5">Biked/Walked to school instead of driving (+1.5 kg)</option>
-        <option value="0.8">Ate a fully plant-based meal (+0.8 kg)</option>
-        <option value="0.6">Hung clothes to dry instead of using the dryer (+0.6 kg)</option>
-        <option value="0.2">Used a reusable water bottle/bag all day (+0.2 kg)</option>
+        <option value="1.5" data-text="Biked/Walked instead of driving">Biked/Walked to school instead of driving (+1.5 kg)</option>
+        <option value="0.8" data-text="Ate a plant-based meal">Ate a fully plant-based meal (+0.8 kg)</option>
+        <option value="0.6" data-text="Hung clothes to dry">Hung clothes to dry instead of using the dryer (+0.6 kg)</option>
+        <option value="0.2" data-text="Used reusable water bottle/bag">Used a reusable water bottle/bag all day (+0.2 kg)</option>
       </select>
       
       <button class="btn-add" id="add-btn">Add Action</button>
@@ -39,13 +49,16 @@
 
     <!-- Progress Display Section -->
     <div class="progress-section">
+      <!-- Feature 3: Action Streak Count Display -->
+      <div class="streak-banner">🔥 Action Count: <span id="streak-count">0</span> logged</div>
+
       <div class="stats-display">
         <div class="total-number" id="total-saved">0.0</div>
         <div class="total-unit">kilograms of CO₂ saved</div>
-        <div class="goal-text">Monthly Project Goal: <span id="goal-target">50</span> kg</div>
+        <div class="goal-text">Target Goal: <span id="goal-target">50</span> kg</div>
       </div>
 
-      <!-- Congratulations Message (Hidden by default in CSS) -->
+      <!-- Congratulations Milestone Alert -->
       <div id="congrats-msg" class="congrats-hidden">
         🎉 <strong>Congratulations!</strong> You've passed the 30 kg milestone! Keep it up! 🌍
       </div>
@@ -53,6 +66,14 @@
       <div class="progress-container">
         <div class="progress-bar" id="progress-bar"></div>
       </div>
+    </div>
+
+    <!-- Feature 4: Interactive Activity History Log -->
+    <div class="history-section">
+      <h3>Activity History Log</h3>
+      <ul id="history-list">
+        <li class="empty-log-msg">No actions logged yet. Start saving carbon!</li>
+      </ul>
     </div>
 
     <!-- Reset Feature -->
