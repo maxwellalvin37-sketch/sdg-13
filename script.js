@@ -223,6 +223,8 @@ function renderChallenges() {
 }
 
 function claimQuest(id, value) {
+  if (completedQuestIds.includes(id)) return; // Prevent double claims
+  
   completedQuestIds.push(id);
   localStorage.setItem('completedQuestIds', JSON.stringify(completedQuestIds));
   
@@ -244,7 +246,7 @@ updateGoalBtn.addEventListener('click', function() {
     if (totalCO2Saved < monthlyGoal) document.getElementById('trophy-goal').classList.remove('unlocked');
     updateUI();
   } else {
-    alert("Please enter a valid configuration goal parameters above 5 kg.");
+    alert("Please enter valid configuration goal parameters above 5 kg.");
   }
 });
 
